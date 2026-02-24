@@ -11,8 +11,12 @@
 
     @include('components.sidebar-left')
 
-    <main class="flex-1 h-full overflow-y-auto flex flex-col">
-        @yield('content')
+    <main class="flex-1 h-full flex flex-col overflow-y-auto relative">
+        @include('components.navbar')
+
+        <div class="flex-1 w-full flex flex-col">
+            @yield('content')
+        </div>
     </main>
 
     @yield('sidebar-right')

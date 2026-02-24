@@ -1,4 +1,4 @@
-@extends('layouts.pos')
+@extends('layouts.app')
 
 @section('sidebar-right')
 

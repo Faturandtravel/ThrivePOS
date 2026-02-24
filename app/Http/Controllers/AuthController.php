@@ -41,17 +41,23 @@ class AuthController extends Controller
         try {
             $auth = Firebase::auth();
             $verifiedIdToken = $auth->verifyIdToken($token);
-            
             $email = $verifiedIdToken->claims()->get('email');
             $name = $verifiedIdToken->claims()->get('name');
+            $picture = $verifiedIdToken->claims()->get('picture');
 
             $user = User::firstOrCreate(
                 ['email' => $email],
                 [
                     'name' => $name,
-                    'password' => bcrypt(Str::random(16)) 
+                    'password' => bcrypt(Str::random(16)),
+                    'avatar' => $picture
                 ]
             );
+
+            if ($picture && $user->avatar !== $picture) {
+                $user->avatar = $picture;
+                $user->save();
+            }
 
             Auth::login($user);
 

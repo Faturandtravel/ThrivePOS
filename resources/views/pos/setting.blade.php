@@ -1,4 +1,4 @@
-@extends('layouts.pos')
+@extends('layouts.app')
 
 @section('sidebar-right')
 @endsection
@@ -37,42 +37,57 @@
                 <p class="text-sm text-slate-500 mt-1">Informasi ini akan ditampilkan pada sistem dan cetakan struk pelanggan.</p>
             </div>
 
-            <form action="#" method="POST" class="space-y-6">
+            @if(session('success'))
+                <div class="mb-6 p-4 bg-green-50 border border-green-200 text-green-700 rounded-xl flex items-center gap-3">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                    <span class="font-medium text-sm">{{ session('success') }}</span>
+                </div>
+            @endif
+
+            <form action="{{ route('setting.update') }}" method="POST" enctype="multipart/form-data" class="space-y-6">
+                @csrf
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
                         <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Nama Toko (Outlet)</label>
-                        <input type="text" value="ThrivePOS Jakarta Raya" class="w-full px-5 py-4 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-slate-900 focus:bg-white outline-none text-sm font-semibold text-slate-800 transition">
+                        <input type="text" name="store_name" value="{{ old('store_name', $setting->store_name ?? 'ThrivePOS Jakarta Raya') }}" class="w-full px-5 py-4 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-slate-900 focus:bg-white outline-none text-sm font-semibold text-slate-800 transition">
                     </div>
                     <div>
                         <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Nomor Telepon</label>
-                        <input type="text" value="+62 812-3456-7890" class="w-full px-5 py-4 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-slate-900 focus:bg-white outline-none text-sm font-semibold text-slate-800 transition">
+                        <input type="text" name="store_phone" value="{{ old('store_phone', $setting->store_phone ?? '+62 812-3456-7890') }}" class="w-full px-5 py-4 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-slate-900 focus:bg-white outline-none text-sm font-semibold text-slate-800 transition">
                     </div>
                 </div>
 
                 <div>
                     <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Alamat Toko (Tampil di Struk)</label>
-                    <textarea rows="2" class="w-full px-5 py-4 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-slate-900 focus:bg-white outline-none text-sm font-semibold text-slate-800 transition">Jl. Jend. Sudirman No. Kav 21, Kuningan, Jakarta Selatan 12920</textarea>
+                    <textarea name="store_address" rows="2" class="w-full px-5 py-4 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-slate-900 focus:bg-white outline-none text-sm font-semibold text-slate-800 transition">{{ old('store_address', $setting->store_address ?? 'Jl. Jend. Sudirman No. Kav 21, Kuningan, Jakarta Selatan 12920') }}</textarea>
                 </div>
 
                 <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 pt-2">
                     <div class="lg:col-span-2">
                         <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Pesan Penutup Struk (Footer)</label>
-                        <textarea rows="4" class="w-full h-32 px-5 py-4 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-slate-900 focus:bg-white outline-none text-sm font-semibold text-slate-800 transition">Terima kasih atas kunjungannya!
-Follow IG kami @thrivepos_jkt</textarea>
+                        <textarea name="receipt_footer" rows="4" class="w-full h-32 px-5 py-4 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-slate-900 focus:bg-white outline-none text-sm font-semibold text-slate-800 transition">{{ old('receipt_footer', $setting->receipt_footer ?? "Terima kasih atas kunjungannya!\nFollow IG kami @thrivepos_jkt") }}</textarea>
                         <p class="text-[11px] text-slate-400 mt-2">*Maksimal 3 baris teks agar struk tidak terlalu panjang.</p>
                     </div>
                     
                     <div>
                         <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Logo Struk (Monokrom)</label>
-                        <div class="w-full h-32 border-2 border-dashed border-slate-300 rounded-xl bg-slate-50 flex flex-col items-center justify-center cursor-pointer hover:bg-slate-100 hover:border-slate-400 transition group">
-                            <svg class="w-8 h-8 text-slate-400 mb-2 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
-                            <span class="text-xs font-bold text-slate-500">Upload Image</span>
+                        <div class="w-full h-32 border-2 border-dashed border-slate-300 rounded-xl bg-slate-50 flex flex-col items-center justify-center cursor-pointer hover:bg-slate-100 hover:border-slate-400 transition group relative overflow-hidden">
+                            <input type="file" name="receipt_logo" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10" accept="image/*" onchange="previewLogo(this)">
+                            
+                            <div id="logo-preview-container" class="{{ $setting && $setting->receipt_logo ? '' : 'hidden' }} absolute inset-0 w-full h-full p-2 flex items-center justify-center bg-white z-0">
+                                <img id="logo-preview" src="{{ $setting && $setting->receipt_logo ? Storage::url($setting->receipt_logo) : '' }}" class="max-h-full max-w-full object-contain">
+                            </div>
+                            
+                            <div class="flex flex-col items-center justify-center pointer-events-none {{ $setting && $setting->receipt_logo ? 'opacity-0 hover:opacity-100 transition-opacity bg-white/80 absolute inset-0 z-0' : '' }}" id="logo-upload-prompt">
+                                <svg class="w-8 h-8 text-slate-400 mb-2 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                                <span class="text-xs font-bold text-slate-500">Upload Image</span>
+                            </div>
                         </div>
                     </div>
                 </div>
 
                 <div class="flex justify-end pt-6 mt-4 border-t border-slate-100">
-                    <button type="button" class="px-8 py-3.5 bg-black text-white font-bold rounded-xl text-sm shadow-md hover:bg-slate-800 hover:shadow-lg hover:-translate-y-0.5 transition-all">
+                    <button type="submit" class="px-8 py-3.5 bg-black text-white font-bold rounded-xl text-sm shadow-md hover:bg-slate-800 hover:shadow-lg hover:-translate-y-0.5 transition-all">
                         Simpan Profil Toko
                     </button>
                 </div>
@@ -144,6 +159,18 @@ Follow IG kami @thrivepos_jkt</textarea>
 </div>
 
 <script>
+    function previewLogo(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+            reader.onload = function(e) {
+                document.getElementById('logo-preview-container').classList.remove('hidden');
+                document.getElementById('logo-preview').src = e.target.result;
+                document.getElementById('logo-upload-prompt').classList.add('opacity-0', 'hover:opacity-100', 'transition-opacity', 'bg-white/80', 'absolute', 'inset-0', 'z-0');
+            }
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+
     function switchTab(tabId) {
         const contents = document.querySelectorAll('.tab-content');
         contents.forEach(content => {

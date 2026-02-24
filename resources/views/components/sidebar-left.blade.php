@@ -12,7 +12,7 @@
             <a href="{{ route('cashier') }}" class="px-4 py-3 {{ request()->routeIs('cashier') ? 'text-white bg-[#222222] shadow-sm font-semibold' : 'text-slate-400 hover:text-white hover:bg-[#1A1A1A] transition-colors font-medium' }} rounded-xl flex items-center">
                 Cashier
             </a>
-            <a href="{{ route('product') }}" class="px-4 py-3 {{ request()->routeIs('product') ? 'text-white bg-[#222222] shadow-sm font-semibold' : 'text-slate-400 hover:text-white hover:bg-[#1A1A1A] transition-colors font-medium' }} rounded-xl flex items-center">
+            <a href="{{ route('product.index') }}" class="px-4 py-3 {{ request()->routeIs('product.*') ? 'text-white bg-[#222222] shadow-sm font-semibold' : 'text-slate-400 hover:text-white hover:bg-[#1A1A1A] transition-colors font-medium' }} rounded-xl flex items-center">
                 Product
             </a>            
             
@@ -24,37 +24,30 @@
         </nav>
     </div>
 
-    <div class="p-5 flex flex-col gap-4">
+   <div class="p-4 mt-auto">
+    <div class="bg-[#161616] rounded-2xl p-5 flex flex-col gap-4 border border-white/5">
         
-        <div class="flex items-center justify-between bg-[#1A1A1A] border border-[#2A2A2A] p-2.5 rounded-xl shadow-sm hover:border-[#3A3A3A] transition-colors">
-            
-            <div class="flex items-center gap-3 overflow-hidden pl-1">
-                <div class="w-8 h-8 rounded-full bg-slate-800 flex items-center justify-center text-xs font-bold text-white shrink-0">
-                    {{ strtoupper(substr(auth()->user()->name ?? 'K', 0, 1)) }}
-                </div>
-                <div class="flex flex-col truncate pr-2">
-                    <span class="text-sm font-bold text-white truncate leading-tight">{{ auth()->user()->name ?? 'Kasir' }}</span>
-                    <span class="text-[10px] text-emerald-500 font-medium flex items-center gap-1.5 mt-0.5">
-                        <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
-                        Online
-                    </span>
-                </div>
+        <div class="flex flex-col gap-2">
+            <span class="text-[9px] uppercase tracking-[0.2em] text-slate-500 font-bold">Powered by</span>
+            <div class="flex items-center gap-3">
+                <h2 class="text-xl font-bold tracking-tighter italic leading-none">Thrive</h2>
+                <div class="w-[1px] h-4 bg-slate-700"></div>
+                <span class="text-sm font-medium tracking-widest text-slate-300 leading-none">POS</span>
             </div>
-
-            <form method="POST" action="{{ route('logout') }}" class="m-0 p-0 shrink-0">
-                @csrf
-                <button type="submit" class="p-2 text-slate-400 hover:text-white hover:bg-red-500 rounded-lg transition-all group" title="Logout">
-                    <svg class="w-5 h-5 transition-transform group-hover:translate-x-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
-                    </svg>
-                </button>
-            </form>
         </div>
 
-        <div class="px-1 text-center">
-            <p class="text-[10px] text-slate-600 leading-relaxed font-medium">
-                ThrivePOS is a registered <br>trademark of Thrive Inc. © 2026
+        <div class="flex flex-wrap gap-x-4 gap-y-1">
+            <a href="#" class="text-[11px] font-semibold text-slate-400 hover:text-white transition-colors">Help Center</a>
+            <a href="#" class="text-[11px] font-semibold text-slate-400 hover:text-white transition-colors">Support</a>
+            <a href="#" class="text-[11px] font-semibold text-slate-400 hover:text-white transition-colors">Legal</a>
+        </div>
+
+        <div class="pt-2 border-t border-slate-800/50">
+            <p class="text-[10px] text-slate-600 leading-relaxed">
+                © 2026 Thrive POS System. <br>
+                Efficient Point of Sale Solutions.
             </p>
         </div>
     </div>
+</div>
 </aside>
