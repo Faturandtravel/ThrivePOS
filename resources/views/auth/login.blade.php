@@ -7,7 +7,7 @@
     <title>Login - ThrivePOS</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
-<body class="flex h-screen w-full overflow-hidden font-sans bg-white">
+<body class="flex flex-col md:flex-row h-screen w-full overflow-hidden font-sans bg-white">
 
     <div class="w-full md:w-1/2 flex flex-col justify-center bg-white px-6 py-10 lg:px-12 xl:px-20 overflow-y-auto">
         
@@ -41,12 +41,12 @@
                     Aplikasi ini hanya untuk staf internal yang berwenang. Semua aktivitas dalam sistem akan dicatat.
                 </p>
                 
-                <div class="flex flex-col items-center justify-center space-y-2.5 opacity-70 hover:opacity-100 transition-opacity">
+                <div class="flex flex-col items-center justify-center space-y-2.5">
                     <span class="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-400">Powered by</span>
                     <div class="flex items-center gap-3">
-                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/37/Firebase_Logo.svg/1024px-Firebase_Logo.svg.png" alt="Firebase Logo" class="h-5">
+                        <img src="{{ asset('assets/images/digimax.png') }}" alt="Firebase Logo" class="h-10">
                         <span class="text-slate-300 font-light">|</span>
-                        <h2 class="text-lg font-extrabold text-slate-800 tracking-tight">ThrivePOS</h2>
+                        <h2 class="text-lg font-bold tracking-tighter italic">Thrive<span class="font-light">POS</h2>
                     </div>
                 </div>
             </div>

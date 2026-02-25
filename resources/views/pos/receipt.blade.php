@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Receipt #{{ $order->id }}</title>
+    <title>Struk #{{ $order->id }}</title>
     @vite(['resources/css/app.css'])
     <style>
         @media print {
@@ -38,7 +38,7 @@
         @if(isset($setting) && $setting->store_address)
             <p style="margin:0;font-size:11px;white-space:pre-wrap;">{{ $setting->store_address }}</p>
         @endif
-        <p style="margin:4px 0 0 0;font-weight:bold;">Receipt #{{ str_pad($order->id, 5, '0', STR_PAD_LEFT) }}</p>
+        <p style="margin:4px 0 0 0;font-weight:bold;">Struk #{{ str_pad($order->id, 5, '0', STR_PAD_LEFT) }}</p>
         <p style="margin:0;font-weight:bold;">{{ $order->created_at->format('d/m/Y H:i') }}</p>
     </div>
 
@@ -47,14 +47,14 @@
             <thead>
                 <tr>
                     <th>Item</th>
-                    <th class="text-right">Qty</th>
+                    <th class="text-right">Jml</th>
                     <th class="text-right">Total</th>
                 </tr>
             </thead>
             <tbody>
                 @foreach($order->items as $item)
                 <tr>
-                    <td>{{ $item->product ? $item->product->name : 'Unknown Product' }}</td>
+                    <td>{{ $item->product ? $item->product->name : 'Produk Tidak Dikenal' }}</td>
                     <td class="text-right">{{ $item->quantity }}</td>
                     <td class="text-right">{{ number_format($item->subtotal, 0, ',', '.') }}</td>
                 </tr>
@@ -70,16 +70,16 @@
                 <td class="text-right font-bold">{{ number_format($order->total, 0, ',', '.') }}</td>
             </tr>
             <tr>
-                <td>Payment Method</td>
+                <td>Metode Pembayaran</td>
                 <td class="text-right">{{ strtoupper($order->payment_method) }}</td>
             </tr>
             @if($order->payment_method === 'cash')
             <tr>
-                <td>Cash Amount</td>
+                <td>Jumlah Tunai</td>
                 <td class="text-right">{{ number_format($order->cash_amount ?? $order->total, 0, ',', '.') }}</td>
             </tr>
             <tr>
-                <td>Change</td>
+                <td>Kembalian</td>
                 <td class="text-right">{{ number_format($order->change_amount, 0, ',', '.') }}</td>
             </tr>
             @elseif($order->payment_method === 'xendit')
@@ -95,7 +95,7 @@
         @if(isset($setting) && $setting->receipt_footer)
             <p style="white-space: pre-wrap;">{{ $setting->receipt_footer }}</p>
         @else
-            <p class="font-bold">Thank You!</p>
+            <p class="font-bold">Terima Kasih!</p>
         @endif
     </div>
 

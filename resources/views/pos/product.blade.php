@@ -39,42 +39,44 @@
     @endif
 </div>
 
-<div class="p-8 pb-20">
-    <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
+<div class="p-4 md:p-8 pb-20">
+    <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 md:mb-8 gap-4 w-full">
         <div>
-            <h1 class="text-2xl font-bold text-slate-900">Product Management</h1>
+            <h1 class="text-2xl font-bold text-slate-900">Manajemen Produk</h1>
             <p class="text-slate-500 text-sm mt-1">Kelola daftar menu, harga, dan ketersediaan stok.</p>
         </div>
         
-        <div class="flex items-center gap-4 w-full md:w-auto">
+        <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 w-full md:w-auto">
             <form method="GET" action="{{ route('product.index') }}" class="relative w-full md:w-72">
-                <input type="text" name="search" value="{{ request('search') }}" placeholder="Search product..." class="w-full pl-11 pr-4 py-3 bg-white border border-slate-100 rounded-2xl shadow-sm focus:ring-2 focus:ring-slate-900 outline-none text-sm font-medium transition">
+                <input type="text" name="search" value="{{ request('search') }}" placeholder="Cari produk..." class="w-full pl-11 pr-4 py-3 bg-white border border-slate-100 rounded-2xl shadow-sm focus:ring-2 focus:ring-slate-900 outline-none text-sm font-medium transition">
                 <button type="submit" class="absolute left-4 top-3.5 text-slate-400">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
                 </button>
             </form>
 
-            <button onclick="openCategoryModal()" class="px-4 py-3 bg-white border border-slate-200 text-slate-700 font-bold rounded-2xl text-sm shadow-sm hover:bg-slate-50 transition-all flex items-center gap-2 whitespace-nowrap">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
-                Category
-            </button>
+            <div class="flex gap-3">
+                <button onclick="openCategoryModal()" class="flex-1 px-4 py-3 bg-white border border-slate-200 text-slate-700 font-bold rounded-2xl text-sm shadow-sm hover:bg-slate-50 transition-all flex items-center justify-center gap-2 whitespace-nowrap">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+                    Kategori
+                </button>
 
-            <button onclick="openProductModal()" class="px-5 py-3 bg-black text-white font-bold rounded-2xl text-sm shadow-md hover:bg-slate-800 transition-all flex items-center gap-2 whitespace-nowrap">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
-                New Product
-            </button>
+                <button onclick="openProductModal()" class="flex-1 px-5 py-3 bg-black text-white font-bold rounded-2xl text-sm shadow-md hover:bg-slate-800 transition-all flex items-center justify-center gap-2 whitespace-nowrap">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+                    Produk
+                </button>
+            </div>
         </div>
     </div>
 
     <div class="flex gap-3 overflow-x-auto pb-4 mb-4 hide-scroll items-center">
-        <a href="{{ route('product.index') }}" class="px-5 py-2 {{ !request('category') ? 'bg-slate-900 text-white' : 'bg-white text-slate-600 border border-slate-200' }} font-semibold rounded-full text-sm shadow-sm whitespace-nowrap hover:opacity-90 transition">All Items</a>
+        <a href="{{ route('product.index') }}" class="px-5 py-2 {{ !request('category') ? 'bg-slate-900 text-white' : 'bg-white text-slate-600 border border-slate-200' }} font-semibold rounded-full text-sm shadow-sm whitespace-nowrap hover:opacity-90 transition">Semua Item</a>
         @foreach($categories as $category)
         <div class="relative group flex items-center">
             <a href="{{ route('product.index', ['category' => $category->id]) }}" class="pl-5 pr-10 py-2 {{ request('category') == $category->id ? 'bg-slate-900 text-white' : 'bg-white text-slate-600 border border-slate-200' }} font-semibold rounded-full text-sm hover:opacity-90 transition whitespace-nowrap">{{ $category->name }}</a>
             <form action="{{ route('category.destroy', $category->id) }}" method="POST" class="absolute right-1 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-opacity" onsubmit="return confirm('Apakah Anda yakin ingin menghapus kategori ini?');">
                 @csrf
                 @method('DELETE')
-                <button type="submit" class="p-1 {{ request('category') == $category->id ? 'text-white/70 hover:text-white hover:bg-white/20' : 'text-slate-400 hover:text-red-500 hover:bg-red-50' }} rounded-full transition" title="Delete Category">
+                <button type="submit" class="p-1 {{ request('category') == $category->id ? 'text-white/70 hover:text-white hover:bg-white/20' : 'text-slate-400 hover:text-red-500 hover:bg-red-50' }} rounded-full transition" title="Hapus Kategori">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
                 </button>
             </form>
@@ -87,11 +89,11 @@
             <table class="w-full text-left text-sm text-slate-600 whitespace-nowrap">
                 <thead class="bg-slate-50/80 text-slate-500 font-bold border-b border-slate-100 uppercase tracking-wider text-[11px]">
                     <tr>
-                        <th class="px-6 py-5 rounded-tl-[2rem]">Product Info</th>
-                        <th class="px-6 py-5">Category</th>
-                        <th class="px-6 py-5">Price</th>
-                        <th class="px-6 py-5">Stock Level</th>
-                        <th class="px-6 py-5 text-center rounded-tr-[2rem]">Actions</th>
+                        <th class="px-6 py-5 rounded-tl-[2rem]">Info Produk</th>
+                        <th class="px-6 py-5">Kategori</th>
+                        <th class="px-6 py-5">Harga</th>
+                        <th class="px-6 py-5">Stok</th>
+                        <th class="px-6 py-5 text-center rounded-tr-[2rem]">Aksi</th>
                     </tr>
                 </thead>
 
@@ -117,19 +119,19 @@
                                 @if($product->stock > 0)
                                     <span class="font-semibold text-slate-700">{{ $product->stock }} Unit</span>
                                 @else
-                                    <span class="font-bold text-red-500">Out of Stock</span>
+                                    <span class="font-bold text-red-500">Stok Habis</span>
                                 @endif
                             </div>
                         </td>
                         <td class="px-6 py-4 text-center">
                             <div class="flex items-center justify-center gap-2 opacity-100">
-                                <button onclick="editProduct({{ $product->toJson() }})" class="p-2 text-blue-600 bg-blue-50 hover:bg-blue-100 rounded-xl transition tooltip" title="Edit Product">
+                                <button onclick="editProduct({{ $product->toJson() }})" class="p-2 text-blue-600 bg-blue-50 hover:bg-blue-100 rounded-xl transition tooltip" title="Edit Produk">
                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
                                 </button>
-                                <form action="{{ route('product.destroy', $product->id) }}" method="POST" class="inline" onsubmit="return confirm('Are you sure you want to delete this product?');">
+                                <form action="{{ route('product.destroy', $product->id) }}" method="POST" class="inline" onsubmit="return confirm('Apakah Anda yakin ingin menghapus produk ini?');">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" class="p-2 text-red-600 bg-red-50 hover:bg-red-100 rounded-xl transition tooltip" title="Delete Product">
+                                    <button type="submit" class="p-2 text-red-600 bg-red-50 hover:bg-red-100 rounded-xl transition tooltip" title="Hapus Produk">
                                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
                                     </button>
                                 </form>
@@ -138,7 +140,7 @@
                     </tr>
                     @empty
                     <tr>
-                        <td colspan="5" class="px-6 py-8 text-center text-slate-500">No products found.</td>
+                        <td colspan="5" class="px-6 py-8 text-center text-slate-500">Produk tidak ditemukan.</td>
                     </tr>
                     @endforelse
                 </tbody>
@@ -154,7 +156,7 @@
 <div id="productModal" class="hidden fixed inset-0 z-[100] flex items-center justify-center bg-slate-900/50 backdrop-blur-sm p-4">
     <div class="bg-white rounded-3xl w-full max-w-lg shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
         <div class="p-6 border-b border-slate-100 flex justify-between items-center">
-            <h3 id="productModalTitle" class="text-xl font-bold text-slate-900">New Product</h3>
+            <h3 id="productModalTitle" class="text-xl font-bold text-slate-900">Produk Baru</h3>
             <button onclick="closeProductModal()" class="text-slate-400 hover:text-slate-600 transition">
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
             </button>
@@ -164,21 +166,21 @@
             <input type="hidden" name="_method" id="productMethod" value="POST">
             
             <div>
-                <label class="block text-sm font-bold text-slate-700 mb-2">Product Name</label>
+                <label class="block text-sm font-bold text-slate-700 mb-2">Nama Produk</label>
                 <input type="text" name="name" id="productName" required class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-2xl focus:ring-2 focus:ring-slate-900 focus:bg-white outline-none transition text-sm">
             </div>
 
             <div class="grid grid-cols-2 gap-4">
                 <div class="relative" id="categoryDropdownWrapper">
-                    <label class="block text-sm font-bold text-slate-700 mb-2">Category</label>
+                    <label class="block text-sm font-bold text-slate-700 mb-2">Kategori</label>
                     <input type="hidden" name="category_id" id="productCategory" required>
                     <button type="button" id="categoryDropdownBtn" onclick="toggleCategory()" class="w-full flex items-center justify-between px-4 py-3 bg-slate-50 border border-slate-200 rounded-2xl focus:ring-2 focus:ring-slate-900 focus:bg-white outline-none transition text-sm text-left">
-                        <span id="categoryDropdownLabel" class="text-slate-500">Select Category</span>
+                        <span id="categoryDropdownLabel" class="text-slate-500">Pilih Kategori</span>
                         <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
                     </button>
                     <div id="categoryDropdownList" class="hidden absolute z-50 w-full mt-2 bg-white border border-slate-100 rounded-2xl shadow-xl overflow-hidden text-sm">
                         <div class="max-h-60 overflow-y-auto py-2">
-                            <div onclick="selectCategory('', 'Select Category')" data-value="" data-name="Select Category" class="px-4 py-2.5 text-slate-500 hover:bg-slate-50 cursor-pointer transition">Select Category</div>
+                            <div onclick="selectCategory('', 'Pilih Kategori')" data-value="" data-name="Pilih Kategori" class="px-4 py-2.5 text-slate-500 hover:bg-slate-50 cursor-pointer transition">Pilih Kategori</div>
                             @foreach($categories as $category)
                             <div onclick="selectCategory('{{ $category->id }}', '{{ $category->name }}')" data-value="{{ $category->id }}" data-name="{{ $category->name }}" class="px-4 py-2.5 text-slate-700 hover:bg-slate-50 cursor-pointer transition">{{ $category->name }}</div>
                             @endforeach
@@ -192,7 +194,7 @@
             </div>
 
             <div>
-                <label class="block text-sm font-bold text-slate-700 mb-2">Price (IDR)</label>
+                <label class="block text-sm font-bold text-slate-700 mb-2">Harga (IDR)</label>
                 <div class="relative">
                     <span class="absolute left-4 top-3 text-slate-500 font-medium">Rp</span>
                     <input type="text" id="productPriceDisplay" required class="w-full pl-12 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-2xl focus:ring-2 focus:ring-slate-900 focus:bg-white outline-none transition text-sm" oninput="formatRupiah(this)">
@@ -201,14 +203,14 @@
             </div>
 
             <div>
-                <label class="block text-sm font-bold text-slate-700 mb-2">Product Image</label>
+                <label class="block text-sm font-bold text-slate-700 mb-2">Gambar Produk</label>
                 <input type="file" name="image" id="productImage" accept="image/*" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-2xl focus:ring-2 focus:ring-slate-900 focus:bg-white outline-none transition text-sm file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-slate-900 file:text-white hover:file:bg-slate-800">
-                <p class="text-xs text-slate-400 mt-2">Leave empty to keep existing image when editing.</p>
+                <p class="text-xs text-slate-400 mt-2">Biarkan kosong untuk mempertahankan gambar yang ada saat mengedit.</p>
             </div>
 
             <div class="pt-4 border-t border-slate-100 flex justify-end gap-3 mt-4">
-                <button type="button" onclick="closeProductModal()" class="px-5 py-2.5 text-slate-600 font-bold hover:bg-slate-50 rounded-2xl transition text-sm">Cancel</button>
-                <button type="submit" class="px-5 py-2.5 bg-slate-900 text-white font-bold rounded-xl shadow-md hover:bg-slate-800 hover:shadow-lg transition text-sm">Save Product</button>
+                <button type="button" onclick="closeProductModal()" class="px-5 py-2.5 text-slate-600 font-bold hover:bg-slate-50 rounded-2xl transition text-sm">Batal</button>
+                <button type="submit" class="px-5 py-2.5 bg-slate-900 text-white font-bold rounded-xl shadow-md hover:bg-slate-800 hover:shadow-lg transition text-sm">Simpan Produk</button>
             </div>
         </form>
     </div>
@@ -217,7 +219,7 @@
 <div id="categoryModal" class="hidden fixed inset-0 z-[100] flex items-center justify-center bg-slate-900/50 backdrop-blur-sm p-4">
     <div class="bg-white rounded-3xl w-full max-w-sm shadow-2xl overflow-hidden">
         <div class="p-6 border-b border-slate-100 flex justify-between items-center">
-            <h3 class="text-xl font-bold text-slate-900">New Category</h3>
+            <h3 class="text-xl font-bold text-slate-900">Kategori Baru</h3>
             <button onclick="closeCategoryModal()" class="text-slate-400 hover:text-slate-600 transition">
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
             </button>
@@ -225,13 +227,13 @@
         <form action="{{ route('category.store') }}" method="POST" class="p-6 space-y-5">
             @csrf
             <div>
-                <label class="block text-sm font-bold text-slate-700 mb-2">Category Name</label>
+                <label class="block text-sm font-bold text-slate-700 mb-2">Nama Kategori</label>
                 <input type="text" name="name" required class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-2xl focus:ring-2 focus:ring-slate-900 focus:bg-white outline-none transition text-sm">
             </div>
 
             <div class="flex justify-end gap-3 pt-2">
-                <button type="button" onclick="closeCategoryModal()" class="px-5 py-2.5 text-slate-600 font-bold hover:bg-slate-50 rounded-2xl transition text-sm">Cancel</button>
-                <button type="submit" class="px-5 py-2.5 bg-slate-900 text-white font-bold rounded-2xl shadow-md hover:bg-slate-800 transition text-sm">Add Category</button>
+                <button type="button" onclick="closeCategoryModal()" class="px-5 py-2.5 text-slate-600 font-bold hover:bg-slate-50 rounded-2xl transition text-sm">Batal</button>
+                <button type="submit" class="px-5 py-2.5 bg-slate-900 text-white font-bold rounded-2xl shadow-md hover:bg-slate-800 transition text-sm">Tambah Kategori</button>
             </div>
         </form>
     </div>
@@ -298,8 +300,8 @@
         document.getElementById('productPrice').value = '';
         document.getElementById('productMethod').value = 'POST';
         document.getElementById('productForm').action = "{{ route('product.store') }}";
-        document.getElementById('productModalTitle').innerText = 'New Product';
-        selectCategory('', 'Select Category');
+        document.getElementById('productModalTitle').innerText = 'Produk Baru';
+        selectCategory('', 'Pilih Kategori');
     }
 
     function closeProductModal() {
@@ -308,13 +310,13 @@
 
     function editProduct(product) {
         openProductModal();
-        document.getElementById('productModalTitle').innerText = 'Edit Product';
+        document.getElementById('productModalTitle').innerText = 'Edit Produk';
         document.getElementById('productMethod').value = 'PUT';
         document.getElementById('productForm').action = `/product/${product.id}`;
         
         document.getElementById('productName').value = product.name;
         
-        let catName = 'Select Category';
+        let catName = 'Pilih Kategori';
         const opt = document.querySelector(`#categoryDropdownList div[data-value="${product.category_id}"]`);
         if (opt) catName = opt.getAttribute('data-name');
         selectCategory(product.category_id, catName);

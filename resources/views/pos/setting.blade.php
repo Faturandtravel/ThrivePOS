@@ -4,26 +4,26 @@
 @endsection
 
 @section('content')
-<div class="p-8 pb-20 max-w-full mx-auto w-full">
+<div class="p-4 md:p-8 pb-20 max-w-full mx-auto w-full">
     
-    <div class="mb-8 flex justify-between items-end">
+    <div class="mb-6 md:mb-8 flex justify-between items-end">
         <div>
-            <h1 class="text-3xl font-bold text-slate-900 tracking-tight">Settings</h1>
+            <h1 class="text-3xl font-bold text-slate-900 tracking-tight">Pengaturan</h1>
             <p class="text-slate-500 text-sm mt-1">Kelola profil toko, konfigurasi struk, dan hak akses staf.</p>
         </div>
     </div>
 
-    <div class="bg-white rounded-3xl shadow-sm border border-slate-100 mb-8 overflow-x-auto hide-scroll sticky top-0 z-10">
-        <nav class="flex gap-2 px-2 py-2" id="settings-tabs">
+    <div class="bg-white rounded-2xl md:rounded-3xl shadow-sm border border-slate-100 mb-6 md:mb-8 sticky top-0 z-10 w-full overflow-hidden">
+        <nav class="flex w-full p-1 md:p-2 gap-1 md:gap-2" id="settings-tabs">
             
-            <button onclick="switchTab('store-profile')" id="tab-store-profile" class="tab-btn px-5 py-3 bg-slate-100 rounded-xl text-slate-900 font-bold text-sm flex items-center gap-2 whitespace-nowrap transition outline-none">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path></svg>
-                Profil Toko & Struk
+            <button onclick="switchTab('store-profile')" id="tab-store-profile" class="tab-btn flex-1 px-2 py-2.5 md:px-5 md:py-3 bg-slate-100 rounded-xl text-slate-900 font-bold text-[11px] sm:text-xs md:text-sm flex flex-col sm:flex-row items-center justify-center gap-1 sm:gap-1.5 md:gap-2 transition outline-none hover:bg-slate-200 text-center leading-tight">
+                <svg class="w-4 h-4 md:w-5 md:h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path></svg>
+                <span>Profil <span class="hidden sm:inline">Toko</span> & Struk</span>
             </button>
             
-            <button onclick="switchTab('user-access')" id="tab-user-access" class="tab-btn px-5 py-3 bg-transparent hover:bg-slate-50 rounded-xl text-slate-500 hover:text-slate-800 font-medium text-sm flex items-center gap-2 whitespace-nowrap transition outline-none">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
-                Akses Sistem (User)
+            <button onclick="switchTab('user-access')" id="tab-user-access" class="tab-btn flex-1 px-2 py-2.5 md:px-5 md:py-3 bg-transparent hover:bg-slate-50 rounded-xl text-slate-500 hover:text-slate-800 font-medium text-[11px] sm:text-xs md:text-sm flex flex-col sm:flex-row items-center justify-center gap-1 sm:gap-1.5 md:gap-2 transition outline-none text-center leading-tight">
+                <svg class="w-4 h-4 md:w-5 md:h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+                <span>Akses <span class="hidden sm:inline">Sistem</span> (User)</span>
             </button>
 
         </nav>
@@ -31,7 +31,7 @@
 
     <div class="w-full relative min-h-[500px]">
 
-        <section id="store-profile" class="tab-content block bg-white rounded-[2rem] shadow-sm border border-slate-100 p-8 animate-fadeIn">
+        <section id="store-profile" class="tab-content block bg-white rounded-3xl md:rounded-4xl shadow-sm border border-slate-100 p-4 md:p-8 animate-fadeIn">
             <div class="mb-8 border-b border-slate-100 pb-5">
                 <h2 class="text-xl font-extrabold text-slate-800">Manajemen Toko & Struk</h2>
                 <p class="text-sm text-slate-500 mt-1">Informasi ini akan ditampilkan pada sistem dan cetakan struk pelanggan.</p>
@@ -80,75 +80,167 @@
                             
                             <div class="flex flex-col items-center justify-center pointer-events-none {{ $setting && $setting->receipt_logo ? 'opacity-0 hover:opacity-100 transition-opacity bg-white/80 absolute inset-0 z-0' : '' }}" id="logo-upload-prompt">
                                 <svg class="w-8 h-8 text-slate-400 mb-2 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
-                                <span class="text-xs font-bold text-slate-500">Upload Image</span>
+                                <span class="text-xs font-bold text-slate-500">Unggah Gambar</span>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <div class="flex justify-end pt-6 mt-4 border-t border-slate-100">
-                    <button type="submit" class="px-8 py-3.5 bg-black text-white font-bold rounded-xl text-sm shadow-md hover:bg-slate-800 hover:shadow-lg hover:-translate-y-0.5 transition-all">
+                <div class="flex flex-col md:flex-row justify-end pt-6 mt-4 border-t border-slate-100">
+                    <button type="submit" class="w-full md:w-auto px-8 py-3.5 bg-black text-white font-bold rounded-xl text-sm shadow-md hover:bg-slate-800 hover:shadow-lg hover:-translate-y-0.5 transition-all">
                         Simpan Profil Toko
                     </button>
                 </div>
             </form>
         </section>
 
-        <section id="user-access" class="tab-content hidden bg-white rounded-[2rem] shadow-sm border border-slate-100 p-8 animate-fadeIn">
+        <section id="user-access" class="tab-content hidden bg-white rounded-3xl md:rounded-4xl shadow-sm border border-slate-100 p-4 md:p-8 animate-fadeIn">
             <div class="mb-8 border-b border-slate-100 pb-5">
                 <h2 class="text-xl font-extrabold text-slate-800">Manajemen Akses Sistem</h2>
                 <p class="text-sm text-slate-500 mt-1">Daftarkan email Google (Gmail/Workspace) staf yang diizinkan untuk login.</p>
             </div>
 
-            <div class="bg-slate-50 p-6 rounded-[1.5rem] border border-slate-100 mb-8">
+            @if(session('success_user'))
+                <div class="mb-6 p-4 bg-green-50 border border-green-200 text-green-700 rounded-xl flex items-center gap-3">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                    <span class="font-medium text-sm">{{ session('success_user') }}</span>
+                </div>
+            @endif
+            @if(session('error_user'))
+                <div class="mb-6 p-4 bg-red-50 border border-red-200 text-red-700 rounded-xl flex items-center gap-3">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    <span class="font-medium text-sm">{{ session('error_user') }}</span>
+                </div>
+            @endif
+            @if ($errors->any())
+                <div class="mb-6 p-4 bg-red-50 border border-red-200 text-red-700 rounded-xl">
+                    <ul class="list-disc pl-5 text-sm font-medium space-y-1">
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
+
+            <form action="{{ route('user.store') }}" method="POST" class="bg-slate-50 p-4 md:p-6 rounded-3xl border border-slate-100 mb-8">
+                @csrf
                 <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-4">Beri Akses ke Email Baru</label>
                 <div class="flex flex-col md:flex-row gap-4">
                     <div class="flex-1 relative">
                         <div class="absolute inset-y-0 left-0 pl-5 flex items-center pointer-events-none">
                             <svg class="w-5 h-5 text-slate-400" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
                         </div>
-                        <input type="email" placeholder="contoh: kasir.satu@gmail.com" class="w-full pl-13 pr-5 py-4 bg-white border border-slate-200 rounded-xl focus:ring-2 focus:ring-slate-900 outline-none text-sm font-semibold text-slate-800 transition shadow-sm">
+                        <input type="email" name="email" required placeholder="contoh: kasir.satu@gmail.com" class="w-full pl-13 pr-5 py-4 bg-white border border-slate-200 rounded-xl focus:ring-2 focus:ring-slate-900 outline-none text-sm font-semibold text-slate-800 transition shadow-sm">
                     </div>
-                    <select class="w-full md:w-48 px-5 py-4 bg-white border border-slate-200 rounded-xl focus:ring-2 focus:ring-slate-900 outline-none text-sm font-semibold text-slate-700 transition appearance-none shadow-sm">
-                        <option value="kasir">Akses: Kasir</option>
-                        <option value="admin">Akses: Manager</option>
-                    </select>
-                    <button type="button" class="w-full md:w-auto px-8 py-4 bg-slate-900 text-white font-bold rounded-xl text-sm shadow-md hover:bg-slate-800 hover:shadow-lg transition-all flex items-center justify-center gap-2">
+                    <div class="relative w-full md:w-48">
+                        <select name="role" class="w-full h-full px-5 py-4 pr-10 bg-white border border-slate-200 rounded-xl focus:ring-2 focus:ring-slate-900 outline-none text-sm font-semibold text-slate-700 transition appearance-none shadow-sm cursor-pointer hover:border-slate-300">
+                            <option value="kasir">Akses: Kasir</option>
+                            <option value="super_admin">Akses: Manager</option>
+                        </select>
+                        <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-4 text-slate-400">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                        </div>
+                    </div>
+                    <button type="submit" class="w-full md:w-auto px-8 py-4 bg-slate-900 text-white font-bold rounded-xl text-sm shadow-md hover:bg-slate-800 hover:shadow-lg transition-all flex items-center justify-center gap-2">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M12 4v16m8-8H4"></path></svg>
                         Tambahkan
                     </button>
                 </div>
-            </div>
+            </form>
 
             <div>
-                <h3 class="text-sm font-bold text-slate-800 mb-4 uppercase tracking-wider">Daftar Akun Terdaftar</h3>
-                <div class="border border-slate-100 rounded-[1.5rem] overflow-hidden shadow-sm">
-                    <table class="w-full text-left text-sm text-slate-600">
-                        <thead class="bg-slate-50/80 border-b border-slate-100">
+                <h3 class="text-xs md:text-sm font-bold text-slate-800 mb-3 md:mb-4 uppercase tracking-wider text-center md:text-left">Daftar Akun Terdaftar</h3>
+                <div class="border border-slate-100 rounded-2xl md:rounded-3xl overflow-hidden shadow-sm w-full">
+                    <table class="w-full text-left text-xs md:text-sm text-slate-600">
+                        <thead class="bg-slate-50/80 border-b border-slate-100 hidden md:table-header-group">
                             <tr>
-                                <th class="px-6 py-4 font-bold text-slate-500 uppercase tracking-wider text-[11px]">Email Pegawai</th>
-                                <th class="px-6 py-4 font-bold text-slate-500 uppercase tracking-wider text-[11px]">Peran (Role)</th>
-                                <th class="px-6 py-4 font-bold text-slate-500 text-right uppercase tracking-wider text-[11px]">Aksi</th>
+                                <th class="px-4 md:px-6 py-3.5 md:py-4 font-bold text-slate-500 uppercase tracking-wider text-[10px] md:text-[11px]">Email Pegawai</th>
+                                <th class="px-4 md:px-6 py-3.5 md:py-4 font-bold text-slate-500 uppercase tracking-wider text-[10px] md:text-[11px]">Peran (Role)</th>
+                                <th class="px-4 md:px-6 py-3.5 md:py-4 font-bold text-slate-500 text-right uppercase tracking-wider text-[10px] md:text-[11px]">Aksi</th>
                             </tr>
                         </thead>
-                        <tbody class="divide-y divide-slate-50">
-                            <tr class="hover:bg-slate-50/50 transition-colors group">
-                                <td class="px-6 py-4">
-                                    <div class="flex items-center gap-4">
-                                        <div class="w-10 h-10 rounded-full bg-slate-900 text-white flex items-center justify-center font-bold text-sm shadow-sm">F</div>
-                                        <div>
-                                            <p class="font-bold text-slate-900 text-base leading-tight mb-0.5">faturahman2806@gmail.com</p>
-                                            <p class="text-xs text-slate-400 font-medium">Ditambahkan: 20 Feb 2026</p>
+                        <tbody class="divide-y divide-slate-50 block md:table-row-group">
+                            @forelse($users as $user)
+                            <tr class="hover:bg-slate-50/50 transition-colors group block md:table-row border-b md:border-b-0 border-slate-100 p-3 md:p-0">
+                                <td class="px-1 md:px-6 py-2 md:py-4 block md:table-cell w-full">
+                                    <div class="flex items-center gap-3">
+                                        @if($user->avatar)
+                                            <img src="{{ $user->avatar }}" alt="{{ $user->name }}" class="w-8 h-8 md:w-10 md:h-10 rounded-full shadow-sm object-cover shrink-0">
+                                        @else
+                                            <div class="w-8 h-8 md:w-10 md:h-10 rounded-full bg-slate-900 text-white flex items-center justify-center font-bold text-xs md:text-sm shadow-sm shrink-0">
+                                                {{ strtoupper(substr($user->name, 0, 1)) }}
+                                            </div>
+                                        @endif
+                                        <div class="min-w-0 flex-1">
+                                            <p class="font-bold text-slate-900 text-[11px] sm:text-xs md:text-base leading-tight mb-0.5 truncate">{{ $user->email }} @if($user->email === env('SUPER_ADMIN_EMAIL')) <span class="bg-yellow-100 text-yellow-800 text-[8px] md:text-[10px] px-1.5 py-0.5 rounded-md font-bold ml-1 uppercase whitespace-nowrap align-middle">Super Admin</span> @endif</p>
+                                            <p class="text-[9px] md:text-[11px] lg:text-xs text-slate-400 font-medium truncate">Ditambahkan: {{ $user->created_at->format('d M Y') }}</p>
                                         </div>
                                     </div>
                                 </td>
-                                <td class="px-6 py-4">
-                                    <span class="px-3 py-1.5 bg-purple-50 text-purple-600 font-bold rounded-lg text-xs uppercase tracking-wider">Manager</span>
+                                <td class="px-1 md:px-6 py-2 md:py-4 flex md:table-cell justify-between items-center w-full mt-2 md:mt-0">
+                                    <span class="text-[10px] font-bold text-slate-500 uppercase tracking-wider md:hidden block">Peran (Role):</span>
+                                    @if($user->id !== auth()->id() && $user->email !== env('SUPER_ADMIN_EMAIL'))
+                                        <form action="{{ route('user.update', $user) }}" method="POST" class="inline-block" id="role-form-{{ $user->id }}">
+                                            @csrf
+                                            @method('PUT')
+                                            <input type="hidden" name="role" value="{{ $user->role }}" id="role-input-{{ $user->id }}">
+                                            <div class="relative inline-block text-left custom-dropdown-container">
+                                                <button type="button" onclick="toggleRoleDropdown({{ $user->id }}, event)" class="relative inline-flex items-center justify-between min-w-[90px] md:min-w-[120px] group pl-6 md:pl-9 pr-6 md:pr-9 py-1 md:py-2 border {{ $user->role === 'super_admin' ? 'bg-purple-50 text-purple-700 border-purple-200 hover:border-purple-300 focus:border-purple-400 focus:ring-purple-200' : 'bg-blue-50 text-blue-700 border-blue-200 hover:border-blue-300 focus:border-blue-400 focus:ring-blue-200' }} shadow-sm hover:shadow font-bold rounded-full text-[9px] md:text-xs uppercase tracking-wider outline-none transition-all duration-200 p-0 text-center gap-1 md:gap-2">
+                                                    <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-2 md:pl-3 {{ $user->role === 'super_admin' ? 'text-purple-500' : 'text-blue-500' }}">
+                                                        @if($user->role === 'super_admin')
+                                                            <svg class="w-3 h-3 md:w-3.5 md:h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
+                                                        @else
+                                                            <svg class="w-3 h-3 md:w-3.5 md:h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
+                                                        @endif
+                                                    </div>
+                                                    <span class="w-full text-center">{{ $user->role === 'super_admin' ? 'Manager' : 'Kasir' }}</span>
+                                                    <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2 md:pr-3 {{ $user->role === 'super_admin' ? 'text-purple-400 group-hover:text-purple-600' : 'text-blue-400 group-hover:text-blue-600' }} transition-colors">
+                                                        <svg class="w-3 h-3 md:w-3.5 md:h-3.5 transform transition-transform duration-200" id="chevron-{{ $user->id }}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M8 9l4-4 4 4m0 6l-4 4-4-4"></path></svg>
+                                                    </div>
+                                                </button>
+                                                
+                                                <div id="role-menu-{{ $user->id }}" class="absolute right-0 mt-2 w-[120px] origin-top-right rounded-2xl bg-white border border-slate-100 shadow-xl focus:outline-none hidden z-50 overflow-hidden transform transition-all duration-200 opacity-0 scale-95" role="menu">
+                                                    <div class="py-1">
+                                                        <button type="button" onclick="submitRole({{ $user->id }}, 'kasir')" class="w-full text-center block px-3 md:px-4 py-2 md:py-2.5 text-[10px] md:text-xs font-bold uppercase tracking-wider text-slate-600 hover:bg-blue-50 hover:text-blue-700 transition-colors" role="menuitem">KASIR</button>
+                                                        <button type="button" onclick="submitRole({{ $user->id }}, 'super_admin')" class="w-full text-center block px-3 md:px-4 py-2 md:py-2.5 text-[10px] md:text-xs font-bold uppercase tracking-wider text-slate-600 hover:bg-purple-50 hover:text-purple-700 transition-colors border-t border-slate-50" role="menuitem">MANAGER</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    @else
+                                        <span class="inline-flex items-center gap-1 md:gap-1.5 px-3 md:px-4 py-1 md:py-2 border shadow-sm {{ $user->role === 'super_admin' ? 'bg-purple-50 text-purple-700 border-purple-200' : 'bg-blue-50 text-blue-700 border-blue-200' }} font-bold rounded-full text-[9px] md:text-xs uppercase tracking-wider">
+                                            @if($user->role === 'super_admin')
+                                                <svg class="w-3 h-3 md:w-3.5 md:h-3.5 text-purple-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
+                                            @else
+                                                <svg class="w-3 h-3 md:w-3.5 md:h-3.5 text-blue-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
+                                            @endif
+                                            {{ $user->role === 'super_admin' ? 'Manager' : 'Kasir' }}
+                                        </span>
+                                    @endif
                                 </td>
-                                <td class="px-6 py-4 text-right">
-                                    <span class="text-sm text-slate-400 italic font-medium px-4">Owner</span>
+                                <td class="px-1 md:px-6 py-2 md:py-4 flex md:table-cell justify-between items-center text-right w-full mt-1 md:mt-0">
+                                    <span class="text-[10px] font-bold text-slate-500 uppercase tracking-wider md:hidden block">Aksi:</span>
+                                    @if($user->id !== auth()->id() && $user->email !== env('SUPER_ADMIN_EMAIL'))
+                                        <form action="{{ route('user.destroy', $user) }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin mencabut akses staf ini?');" class="ml-auto w-full md:w-auto">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="text-[10px] md:text-sm text-red-500 hover:text-red-700 font-bold px-3 py-1.5 md:px-4 md:py-2 hover:bg-red-50 rounded-lg transition whitespace-nowrap outline-none flex items-center justify-end gap-1.5 w-full md:w-auto mt-1 md:mt-0 ml-auto">
+                                                <svg class="w-3.5 h-3.5 hidden md:block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                                                Cabut
+                                            </button>
+                                        </form>
+                                    @elseif($user->id === auth()->id())
+                                        <span class="text-[9px] md:text-sm text-slate-400 italic font-medium px-2 md:px-4 whitespace-nowrap">Akun Anda</span>
+                                    @else
+                                        <span class="opacity-0 hidden md:inline-block">-</span>
+                                    @endif
                                 </td>
                             </tr>
+                            @empty
+                            <tr>
+                                <td colspan="3" class="px-6 py-6 md:py-8 text-center text-slate-500 text-xs md:text-sm">Belum ada akun terdaftar selain Anda.</td>
+                            </tr>
+                            @endforelse
                         </tbody>
                     </table>
                 </div>
@@ -159,6 +251,69 @@
 </div>
 
 <script>
+    function toggleRoleDropdown(id, event) {
+        if(event) event.stopPropagation();
+        
+        // Hide all others
+        const allMenus = document.querySelectorAll('[id^="role-menu-"]');
+        const allChevrons = document.querySelectorAll('[id^="chevron-"]');
+        
+        allMenus.forEach((el, index) => {
+            if (el.id !== 'role-menu-' + id) {
+                if(!el.classList.contains('hidden')) {
+                    el.classList.remove('opacity-100', 'scale-100');
+                    el.classList.add('opacity-0', 'scale-95');
+                    allChevrons[index].classList.remove('rotate-180');
+                    setTimeout(() => { el.classList.add('hidden'); }, 200);
+                }
+            }
+        });
+
+        // Toggle current
+        const menu = document.getElementById('role-menu-' + id);
+        const chevron = document.getElementById('chevron-' + id);
+        
+        if (menu.classList.contains('hidden')) {
+            menu.classList.remove('hidden');
+            chevron.classList.add('rotate-180');
+            // Allow display: block to apply
+            setTimeout(() => {
+                menu.classList.remove('opacity-0', 'scale-95');
+                menu.classList.add('opacity-100', 'scale-100');
+            }, 10);
+        } else {
+            menu.classList.remove('opacity-100', 'scale-100');
+            menu.classList.add('opacity-0', 'scale-95');
+            chevron.classList.remove('rotate-180');
+            setTimeout(() => {
+                menu.classList.add('hidden');
+            }, 200);
+        }
+    }
+
+    function submitRole(id, role) {
+        document.getElementById('role-input-' + id).value = role;
+        document.getElementById('role-form-' + id).submit();
+    }
+
+    // Close when clicking outside
+    document.addEventListener('click', function(event) {
+        if (!event.target.closest('.custom-dropdown-container')) {
+            const allMenus = document.querySelectorAll('[id^="role-menu-"]');
+            const allChevrons = document.querySelectorAll('[id^="chevron-"]');
+            allMenus.forEach((menu, index) => {
+                if(!menu.classList.contains('hidden')) {
+                    menu.classList.remove('opacity-100', 'scale-100');
+                    menu.classList.add('opacity-0', 'scale-95');
+                    if(allChevrons[index]) allChevrons[index].classList.remove('rotate-180');
+                    setTimeout(() => {
+                        menu.classList.add('hidden');
+                    }, 200);
+                }
+            });
+        }
+    });
+
     function previewLogo(input) {
         if (input.files && input.files[0]) {
             var reader = new FileReader();

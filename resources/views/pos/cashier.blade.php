@@ -5,16 +5,19 @@
 @endsection
 
 @section('content')
-<div class="p-8">
+<div class="p-4 md:p-8 pb-24 lg:pb-8">
     
-    <div class="flex justify-between items-center mb-8">
-        <h1 class="text-2xl font-bold text-slate-900">Food & Drinks</h1>
-        
-        <form action="{{ route('cashier') }}" method="GET" class="relative w-72">
+    <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 md:mb-8 gap-4">
+        <div>
+            <h1 class="text-2xl font-bold text-slate-900">{{ \App\Models\Setting::first()->store_name ?? 'THRIVE POS' }}</h1>
+            <p class="text-slate-500 text-sm mt-1">{{ \App\Models\Setting::first()->store_address ?? 'THRIVE POS' }}</p>
+        </div>
+
+        <form action="{{ route('cashier') }}" method="GET" class="relative w-full md:w-72">
             @if(request('category'))
                 <input type="hidden" name="category" value="{{ request('category') }}">
             @endif
-            <input type="text" name="search" value="{{ request('search') }}" placeholder="Search item..." class="w-full pl-12 pr-4 py-3 bg-white border border-slate-100 rounded-2xl shadow-sm focus:ring-2 focus:ring-slate-900 outline-none text-sm font-medium transition">
+            <input type="text" name="search" value="{{ request('search') }}" placeholder="Cari item..." class="w-full pl-12 pr-4 py-3 bg-white border border-slate-100 rounded-2xl shadow-sm focus:ring-2 focus:ring-slate-900 outline-none text-sm font-medium transition">
             <button type="submit" class="absolute left-4 top-3.5 text-slate-400 hover:text-slate-900 transition">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
             </button>
@@ -23,11 +26,11 @@
 
     <div class="mb-8">
         <div class="flex justify-between items-center mb-4">
-            <h2 class="text-lg font-bold text-slate-800">Categories</h2>
+            <h2 class="text-lg font-bold text-slate-800">Kategori</h2>
         </div>
         
         <div class="flex gap-3 overflow-x-auto pb-2 hide-scroll">
-            <a href="{{ route('cashier', request()->except('category')) }}" class="px-6 py-2.5 {{ !request('category') ? 'bg-black text-white' : 'bg-white text-slate-600 hover:bg-slate-100 border border-slate-100' }} font-semibold rounded-full text-sm shadow-sm transition whitespace-nowrap">All</a>
+            <a href="{{ route('cashier', request()->except('category')) }}" class="px-6 py-2.5 {{ !request('category') ? 'bg-black text-white' : 'bg-white text-slate-600 hover:bg-slate-100 border border-slate-100' }} font-semibold rounded-full text-sm shadow-sm transition whitespace-nowrap">Semua</a>
             @foreach($categories as $category)
             <a href="{{ route('cashier', array_merge(request()->query(), ['category' => $category->id])) }}" class="px-6 py-2.5 {{ request('category') == $category->id ? 'bg-black text-white' : 'bg-white text-slate-600 hover:bg-slate-100 border border-slate-100' }} font-semibold rounded-full text-sm shadow-sm transition whitespace-nowrap flex items-center gap-2">{{ $category->name }}</a>
             @endforeach
@@ -72,37 +75,42 @@
         <div class="mb-4">
             <svg class="w-16 h-16 text-slate-300 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 002-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
         </div>
-        <h3 class="text-lg font-bold text-slate-700">No products found</h3>
-        <p class="text-slate-500 text-sm mt-1">Try adjusting your search or filter</p>
+        <h3 class="text-lg font-bold text-slate-700">Produk tidak ditemukan</h3>
+        <p class="text-slate-500 text-sm mt-1">Coba sesuaikan pencarian atau filter Anda</p>
     </div>
     @endforelse
 
-    <!-- Receipt Modal -->
     <div id="receipt-modal" class="fixed inset-0 bg-black/60 z-50 hidden items-center justify-center p-4 backdrop-blur-sm">
         <div class="bg-white rounded-3xl shadow-2xl w-full max-w-sm overflow-hidden flex flex-col max-h-[90vh] scale-95 opacity-0 transition-all duration-300 transform" id="receipt-modal-content">
             <div class="p-4 border-b border-slate-100 flex justify-between items-center bg-white">
                 <h3 class="font-bold text-slate-800 flex items-center gap-2">
                     <svg class="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                    Payment Successful
+                    Pembayaran Berhasil
                 </h3>
                 <button onclick="closeReceiptModal()" class="w-8 h-8 flex items-center justify-center rounded-full bg-slate-50 text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
                 </button>
             </div>
             <div class="flex-1 overflow-auto bg-slate-100/50 p-4 flex justify-center">
-                <!-- Iframe for the receipt -->
                 <iframe id="receipt-iframe" class="w-[80mm] h-[400px] bg-white border border-slate-200 shadow-sm rounded"></iframe>
             </div>
             <div class="p-4 border-t border-slate-100 bg-white flex gap-3">
                 <button onclick="printIframe()" class="flex-1 bg-black text-white py-3 rounded-xl font-bold hover:bg-slate-800 transition shadow-md shadow-slate-200 flex items-center justify-center gap-2">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path></svg>
-                    Print
+                    Cetak
                 </button>
-                <button onclick="closeReceiptModal()" class="flex-1 bg-white border-2 border-slate-100 text-slate-700 py-3 rounded-xl font-bold hover:bg-slate-50 hover:border-slate-200 transition">New Order</button>
+                <button onclick="closeReceiptModal()" class="flex-1 bg-white border-2 border-slate-100 text-slate-700 py-3 rounded-xl font-bold hover:bg-slate-50 hover:border-slate-200 transition">Pesanan Baru</button>
             </div>
         </div>
     </div>
 
+    <!-- Mobile Cart Button -->
+    <button onclick="toggleSidebarRight()" class="lg:hidden fixed bottom-6 right-6 z-[80] bg-black text-white p-4 rounded-full shadow-2xl flex items-center justify-center gap-2 border-[3px] border-white ring-4 ring-black/10 transition-transform active:scale-95">
+        <div class="relative">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path></svg>
+            <span id="mobile-cart-badge" class="absolute -top-2 -right-2 bg-red-500 text-white text-[10px] font-bold w-5 h-5 flex items-center justify-center rounded-full border border-black hidden">0</span>
+        </div>
+    </button>
 </div>
 @endsection
 
@@ -177,13 +185,26 @@
 
         document.getElementById('cart-subtotal').innerText = formatRupiah(subtotal);
         document.getElementById('cart-total').innerText = formatRupiah(total);
+
+        // Update mobile cart badge count
+        const mobileBadge = document.getElementById('mobile-cart-badge');
+        if(mobileBadge) {
+            let totalItems = 0;
+            Object.keys(cart).forEach(id => totalItems += cart[id].quantity);
+            if(totalItems > 0) {
+                mobileBadge.innerText = totalItems;
+                mobileBadge.classList.remove('hidden');
+            } else {
+                mobileBadge.classList.add('hidden');
+            }
+        }
         
         if (typeof calculateChange === 'function') {
             calculateChange();
         }
         
         if (Object.keys(cart).length === 0) {
-            container.innerHTML = '<div class="text-slate-500 text-sm text-center py-24 flex flex-col items-center gap-2"><svg class="w-10 h-10 mx-auto text-slate-600 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>Cart is empty</div>';
+            container.innerHTML = '<div class="text-slate-500 text-sm text-center py-24 flex flex-col items-center gap-2"><svg class="w-10 h-10 mx-auto text-slate-600 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>Keranjang kosong</div>';
         }
     }
 
@@ -258,12 +279,12 @@
 
     async function placeOrder() {
         if (Object.keys(cart).length === 0) {
-            alert('Cart is empty.');
+            alert('Keranjang kosong.');
             return;
         }
 
         if (selectedPayment === null) {
-            alert('Please select a payment method.');
+            alert('Silakan pilih metode pembayaran.');
             return;
         }
 
@@ -287,7 +308,7 @@
             cashAmount = parseFloat(cashInput.replace(/\./g, '')) || 0;
             
             if (cashAmount < total) {
-                alert('Insufficient cash amount.');
+                alert('Jumlah uang tunai tidak cukup.');
                 return;
             }
             changeAmount = cashAmount - total;
@@ -325,7 +346,7 @@
                     const placeOrderBtn = document.querySelector('button[onclick="placeOrder()"]');
                     const originalBtnText = placeOrderBtn ? placeOrderBtn.innerHTML : '';
                     if (placeOrderBtn) {
-                        placeOrderBtn.innerHTML = '<svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white inline-block" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg> Waiting for Payment...';
+                        placeOrderBtn.innerHTML = '<svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white inline-block" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg> Menunggu Pembayaran...';
                         placeOrderBtn.disabled = true;
                         placeOrderBtn.classList.add('opacity-70', 'cursor-not-allowed');
                     }
@@ -358,7 +379,7 @@
                                     placeOrderBtn.disabled = false;
                                     placeOrderBtn.classList.remove('opacity-70', 'cursor-not-allowed');
                                 }
-                                alert('Payment link expired. Please try again.');
+                                alert('Tautan pembayaran kedaluwarsa. Silakan coba lagi.');
                             }
                         } catch (e) {
                             console.error('Error polling status:', e);
@@ -370,7 +391,7 @@
                     showReceiptModal(data.order_id);
                 }
             } else {
-                alert('Failed to place order: ' + (data.message || 'Unknown error'));
+                alert('Gagal membuat pesanan: ' + (data.message || 'Error tidak diketahui'));
             }
         } catch (error) {
             console.error('Error placing order:', error);

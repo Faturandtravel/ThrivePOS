@@ -6,9 +6,121 @@ use Illuminate\Http\Request;
 
 class PosController extends Controller
 {
-    public function dashboard()
+    public function dashboard(Request $request)
     {
-        return view('pos.dashboard');
+        $startDate = $request->query('start_date') ? \Carbon\Carbon::parse($request->query('start_date'))->startOfDay() : \Carbon\Carbon::now()->startOfMonth();
+        $endDate = $request->query('end_date') ? \Carbon\Carbon::parse($request->query('end_date'))->endOfDay() : \Carbon\Carbon::now()->endOfDay();
+
+        $today = \Carbon\Carbon::today();
+        $yesterday = \Carbon\Carbon::yesterday();
+        $startOfWeek = \Carbon\Carbon::now()->startOfWeek();
+        $startOfLastWeek = \Carbon\Carbon::now()->subWeek()->startOfWeek();
+        $startOfWeekSubSec = $startOfWeek->copy()->subSecond();
+        $startOfMonth = \Carbon\Carbon::now()->startOfMonth();
+        $startOfLastMonth = \Carbon\Carbon::now()->subMonth()->startOfMonth();
+        $startOfMonthSubSec = $startOfMonth->copy()->subSecond();
+
+        $salesToday = \App\Models\Order::where('payment_status', 'paid')
+            ->whereDate('created_at', $today)
+            ->sum('total');
+        $salesYesterday = \App\Models\Order::where('payment_status', 'paid')
+            ->whereDate('created_at', $yesterday)
+            ->sum('total');
+        
+        $todayGrowth = $salesYesterday > 0 
+            ? (($salesToday - $salesYesterday) / $salesYesterday) * 100 
+            : ($salesToday > 0 ? 100 : 0);
+
+        $salesThisWeek = \App\Models\Order::where('payment_status', 'paid')
+            ->whereBetween('created_at', [$startOfWeek, \Carbon\Carbon::now()])
+            ->sum('total');
+        $salesLastWeek = \App\Models\Order::where('payment_status', 'paid')
+            ->whereBetween('created_at', [$startOfLastWeek, $startOfWeekSubSec])
+            ->sum('total');
+            
+        $weekGrowth = $salesLastWeek > 0 
+            ? (($salesThisWeek - $salesLastWeek) / $salesLastWeek) * 100 
+            : ($salesThisWeek > 0 ? 100 : 0);
+
+        $salesThisMonth = \App\Models\Order::where('payment_status', 'paid')
+            ->whereBetween('created_at', [$startOfMonth, \Carbon\Carbon::now()])
+            ->sum('total');
+        $salesLastMonth = \App\Models\Order::where('payment_status', 'paid')
+            ->whereBetween('created_at', [$startOfLastMonth, $startOfMonthSubSec])
+            ->sum('total');
+            
+        $monthGrowth = $salesLastMonth > 0 
+            ? (($salesThisMonth - $salesLastMonth) / $salesLastMonth) * 100 
+            : ($salesThisMonth > 0 ? 100 : 0);
+
+        // Filter charts and recent transactions by the selected date range
+        $categorySales = \Illuminate\Support\Facades\DB::table('order_items')
+            ->join('orders', 'order_items.order_id', '=', 'orders.id')
+            ->join('products', 'order_items.product_id', '=', 'products.id')
+            ->join('categories', 'products.category_id', '=', 'categories.id')
+            ->where('orders.payment_status', 'paid')
+            ->whereBetween('orders.created_at', [$startDate, $endDate])
+            ->select('categories.name', \Illuminate\Support\Facades\DB::raw('SUM(order_items.subtotal) as total_sales'))
+            ->groupBy('categories.id', 'categories.name')
+            ->get();
+            
+        $categoryLabels = $categorySales->pluck('name')->toArray();
+        $categoryData = $categorySales->pluck('total_sales')->toArray();
+
+        $paymentMethods = \App\Models\Order::where('payment_status', 'paid')
+            ->whereBetween('created_at', [$startDate, $endDate])
+            ->select('payment_method', \Illuminate\Support\Facades\DB::raw('COUNT(*) as count'))
+            ->groupBy('payment_method')
+            ->get();
+            
+        $paymentLabels = [];
+        $paymentData = [];
+        foreach($paymentMethods as $pm) {
+            $paymentLabels[] = ucfirst($pm->payment_method);
+            $paymentData[] = $pm->count;
+        }
+
+        $recentTransactions = \App\Models\Order::with('items')
+            ->whereBetween('created_at', [$startDate, $endDate])
+            ->orderBy('created_at', 'desc')
+            ->take(5)
+            ->get();
+
+        return view('pos.dashboard', compact(
+            'salesToday', 'todayGrowth',
+            'salesThisWeek', 'weekGrowth',
+            'salesThisMonth', 'monthGrowth',
+            'categoryLabels', 'categoryData',
+            'paymentLabels', 'paymentData',
+            'recentTransactions',
+            'startDate', 'endDate'
+        ));
+    }
+
+    public function transactions(Request $request)
+    {
+        $startDate = $request->query('start_date') ? \Carbon\Carbon::parse($request->query('start_date'))->startOfDay() : null;
+        $endDate = $request->query('end_date') ? \Carbon\Carbon::parse($request->query('end_date'))->endOfDay() : null;
+
+        $query = \App\Models\Order::with('items.product')->orderBy('created_at', 'desc');
+
+        if ($startDate && $endDate) {
+            $query->whereBetween('created_at', [$startDate, $endDate]);
+        }
+
+        $orders = $query->paginate(15)->appends(request()->query());
+
+        return view('pos.transactions', compact('orders', 'startDate', 'endDate'));
+    }
+
+    public function exportExcel(Request $request)
+    {
+        $startDate = $request->query('start_date') ? \Carbon\Carbon::parse($request->query('start_date'))->startOfDay() : \Carbon\Carbon::now()->startOfMonth();
+        $endDate = $request->query('end_date') ? \Carbon\Carbon::parse($request->query('end_date'))->endOfDay() : \Carbon\Carbon::now()->endOfDay();
+
+        $filename = 'transactions_' . $startDate->format('Ymd') . '_to_' . $endDate->format('Ymd') . '.xlsx';
+
+        return \Maatwebsite\Excel\Facades\Excel::download(new \App\Exports\OrdersExport($startDate, $endDate), $filename);
     }
 
     public function cashier(Request $request)
@@ -124,7 +236,8 @@ class PosController extends Controller
     public function setting()
     {
         $setting = \App\Models\Setting::first();
-        return view('pos.setting', compact('setting'));
+        $users = \App\Models\User::orderBy('created_at', 'desc')->get();
+        return view('pos.setting', compact('setting', 'users'));
     }
 
     public function updateSetting(Request $request)
@@ -161,5 +274,57 @@ class PosController extends Controller
         return response()->json([
             'status' => $order->payment_status
         ]);
+    }
+
+    public function storeUser(Request $request)
+    {
+        $validated = $request->validate([
+            'email' => 'required|email|unique:users,email',
+            'name' => 'nullable|string|max:255',
+            'role' => 'required|string|in:kasir,super_admin',
+        ]);
+
+        $name = $validated['name'] ?? explode('@', $validated['email'])[0];
+
+        \App\Models\User::create([
+            'email' => $validated['email'],
+            'name' => $name,
+            'password' => bcrypt(\Illuminate\Support\Str::random(16)),
+            'role' => $validated['role'],
+        ]);
+
+        return redirect()->back()->with('success_user', 'Akses staf berhasil ditambahkan.');
+    }
+
+    public function updateUser(Request $request, \App\Models\User $user)
+    {
+        if ($user->id === auth()->id()) {
+            return redirect()->back()->with('error_user', 'Anda tidak dapat mengubah peran Anda sendiri.');
+        }
+
+        if ($user->email === env('SUPER_ADMIN_EMAIL')) {
+            return redirect()->back()->with('error_user', 'Peran Super Admin utama tidak dapat diubah.');
+        }
+
+        $validated = $request->validate([
+            'role' => 'required|string|in:kasir,super_admin',
+        ]);
+
+        $user->update([
+            'role' => $validated['role'],
+        ]);
+
+        return redirect()->back()->with('success_user', 'Peran staf berhasil diperbarui.');
+    }
+
+    public function destroyUser(\App\Models\User $user)
+    {
+        if ($user->id === auth()->id()) {
+            return redirect()->back()->with('error_user', 'Anda tidak dapat menghapus akun Anda sendiri.');
+        }
+
+        $user->delete();
+
+        return redirect()->back()->with('success_user', 'Akses staf berhasil dihapus.');
     }
 }

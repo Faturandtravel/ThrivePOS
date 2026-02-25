@@ -45,14 +45,22 @@ class AuthController extends Controller
             $name = $verifiedIdToken->claims()->get('name');
             $picture = $verifiedIdToken->claims()->get('picture');
 
-            $user = User::firstOrCreate(
-                ['email' => $email],
-                [
-                    'name' => $name,
-                    'password' => bcrypt(Str::random(16)),
-                    'avatar' => $picture
-                ]
-            );
+            if ($email === env('SUPER_ADMIN_EMAIL')) {
+                $user = User::firstOrCreate(
+                    ['email' => $email],
+                    [
+                        'name' => $name,
+                        'password' => bcrypt(Str::random(16)),
+                        'avatar' => $picture,
+                        'role' => 'super_admin'
+                    ]
+                );
+            } else {
+                $user = User::where('email', $email)->first();
+                if (!$user) {
+                    return response()->json(['message' => 'Akun tidak memiliki akses.'], 403);
+                }
+            }
 
             if ($picture && $user->avatar !== $picture) {
                 $user->avatar = $picture;

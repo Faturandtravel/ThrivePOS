@@ -1,6 +1,9 @@
-<header class="w-full flex justify-between items-center px-6 py-3 shrink-0 sticky top-0 bg-white border-b border-slate-200 z-50">
-    <div class="flex items-center gap-2">
-        </div>
+<header class="w-full flex justify-between items-center px-4 md:px-6 py-3 shrink-0 sticky top-0 bg-white border-b border-slate-200 z-50">
+    <div class="flex items-center gap-2 md:gap-4">
+        <button onclick="toggleSidebarLeft()" class="md:hidden p-2 -ml-2 text-slate-500 hover:text-slate-900 focus:outline-none focus:ring-2 focus:ring-slate-200 rounded-xl transition flex items-center justify-center">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+        </button>
+    </div>
 
     <div class="relative group">
         <button class="flex items-center gap-3 hover:bg-slate-50 p-1.5 pr-3 rounded-full transition-all focus:outline-none border border-transparent hover:border-slate-100">
@@ -8,7 +11,7 @@
 
             <div class="text-right hidden sm:block">
                 <p class="text-sm font-bold text-slate-700 leading-none">{{ auth()->user()->name ?? 'Kasir' }}</p>
-                <p class="text-[10px] font-medium text-slate-400 mt-1 uppercase tracking-wider">Administrator</p>
+                <p class="text-[10px] font-medium text-slate-400 mt-1 uppercase tracking-wider">{{ auth()->user()->role === 'super_admin' ? 'Manager' : 'Kasir' }}</p>
             </div>
 
             <div class="relative">
